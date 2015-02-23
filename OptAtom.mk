@@ -39,21 +39,21 @@ TARGET_GLOBAL_CFLAGS += \
                         -fgraphite-identity \
 
 # The following are very specific to our Atom
-TARGET_GLOBAL_CFLAGS += \
-                        --param l1-cache-line-size=64 \
-                        --param l1-cache-size=24 \
-                        --param l2-cache-size=512 \
+# TARGET_GLOBAL_CFLAGS += \
+#                         --param l1-cache-line-size=64 \
+#                         --param l1-cache-size=24 \
+#                         --param l2-cache-size=512 \
 
-TARGET_GLOBAL_CFLAGS += -DUSE_SSSE3 -DUSE_SSE2
-TARGET_GLOBAL_CPPFLAGS += -march=atom -fno-exceptions
-TARGET_GLOBAL_LDFLAGS += -Wl,-O1
+# TARGET_GLOBAL_CFLAGS += -DUSE_SSSE3 -DUSE_SSE2
+# TARGET_GLOBAL_CPPFLAGS += -march=atom -fno-exceptions
+# TARGET_GLOBAL_LDFLAGS += -Wl,-O1
 
 # Dalvik with houdini
-INTEL_HOUDINI := true
-WITH_JIT := true
-LOCAL_CFLAGS += -DARCH_IA32
-WITH_SELF_VERIFICATION := true
-TARGET_ARCH_LOWMEM := true
+# INTEL_HOUDINI := true
+# WITH_JIT := true
+# LOCAL_CFLAGS += -DARCH_IA32
+# WITH_SELF_VERIFICATION := true
+# TARGET_ARCH_LOWMEM := true
 
 # x86 Dalvik opts, only for intel BSP dalvik
 WITH_PCG := true

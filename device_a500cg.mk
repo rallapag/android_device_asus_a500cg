@@ -207,12 +207,12 @@ PRODUCT_PACKAGES += \
     link_modprobe
 
 # Houdini
-PRODUCT_COPY_FILES += \
-        $(call find-copy-subdir-files,*,$(LOCAL_PATH)/houdini/system,system)
+# PRODUCT_COPY_FILES += \
+#         $(call find-copy-subdir-files,*,$(LOCAL_PATH)/houdini/system,system)
 
-PRODUCT_PACKAGES += \
-   libhoudini_hook \
-   houdini_hook
+# PRODUCT_PACKAGES += \
+#    libhoudini_hook \
+#    houdini_hook
 
 
 
@@ -278,8 +278,8 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.debuggable=0 \
-    persist.sys.usb.config=mtp \
-    dalvik.vm.houdini=on
+    persist.sys.usb.config=mtp
+#     dalvik.vm.houdini=on
 #    ro.secure=0 \
 #    ro.adb.secure=0 \
 
