@@ -1,15 +1,17 @@
-
+include $(GENERIC_X86_CONFIG_MK)
 LOCAL_PATH := device/asus/a500cg
 
 TARGET_BOARD_PLATFORM := clovertrail
 TARGET_ARCH := x86
-#TARGET_ARCH_VARIANT := x86-atom
-TARGET_ARCH_VARIANT := x86
+TARGET_ARCH_VARIANT := x86-atom
 TARGET_CPU_ABI := x86
 TARGET_CPU_VARIANT := x86
 TARGET_CPU_ABI2 := armeabi-v7a
 TARGET_BOOTLOADER_BOARD_NAME := clovertrail
 TARGET_CPU_SMP := true
+INTEL_INGREDIENTS_VERSIONS := true
+# Atom optimizations to improve memory benchmarks.
+-include $(LOCAL_PATH)/OptAtom.mk
 
 BOARD_CREATE_MODPROBE_SYMLINK := true
 COMMON_GLOBAL_CFLAGS += -DNEEDS_VECTORIMPL_SYMBOLS
@@ -21,20 +23,20 @@ BOARD_MALLOC_ALIGNMENT := 16
 HAVE_SELINUX := true
 BOARD_SEPOLICY_DIRS += device/asus/a500cg/sepolicy
 BOARD_SEPOLICY_UNION += \
-    file_contexts \
-    seapp_contexts \
-    file.te \
-    genfs_contexts \
-    device.te \
-    surfaceflinger.te \
-    vold.te \
-    ecryptfs.te \
-    zygote.te \
-    su.te \
-    pvrsrvctl.te \
-    bluetooth.te \
-    mediaserver.te
-    property_contexts \
+	file_contexts \
+	seapp_contexts \
+	file.te \
+	genfs_contexts \
+	device.te \
+	surfaceflinger.te \
+	vold.te \
+	ecryptfs.te \
+	zygote.te \
+	su.te \
+	pvrsrvctl.te \
+	bluetooth.te \
+	mediaserver.te \
+	property_contexts
 
 # Make settings
 TARGET_NO_RECOVERY := false
@@ -52,6 +54,9 @@ BOARD_KERNEL_PAGESIZE := 2048
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1363148800
 BOARD_FLASH_BLOCK_SIZE := 131072
 
+#BUILD_WITH_FULL_STAGEFRIGHT := true
+
+# Use this flag if the board has a ext4 partition larger than 2gb
 TARGET_USERIMAGES_USE_EXT4 := true
 
 # Wifi
@@ -70,7 +75,16 @@ WIFI_DRIVER_MODULE_ARG := "iface_name=wlan0 firmware_path=/system/etc/firmware/f
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_BCM := true
 
-# HW_Renderer
+# GPS
+BOARD_HAVE_GPS := true
+
+# select libcamera2 as the camera HAL
+USE_CAMERA_HAL2 := true
+
+# Hack to use AVC to encode camera videos.
+TARGET_NO_METADATA_ON_AVC_ENC := true
+
+#HW_Renderer
 USE_OPENGL_RENDERER := true
 BOARD_EGL_CFG := $(LOCAL_PATH)/configs/egl.cfg
 # HWComposer
@@ -83,7 +97,6 @@ TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := true
 # BOARD_USE_LIBVA := true
 # BOARD_USE_LIBMIX := true
 # BOARD_USES_WRS_OMXIL_CORE := true
-# BUILD_WITH_FULL_STAGEFRIGHT := true
 
 # Force the screenshot path to CPU consumer
 COMMON_GLOBAL_CFLAGS += -DFORCE_SCREENSHOT_CPU_PATH
@@ -91,16 +104,16 @@ COMMON_GLOBAL_CFLAGS += -DFORCE_SCREENSHOT_CPU_PATH
 # Enable WEBGL in WebKit
 ENABLE_WEBGL := true
 
-# Audio
-BOARD_USES_ALSA_AUDIO := true
-# BUILD_WITH_ALSA_UTILS := true
-
 
 # Recovery
 TARGET_RECOVERY_PIXEL_FORMAT := "BGRA_8888"
 DEVICE_RESOLUTION := 720x1280
 TARGET_RECOVERY_SCREEN_WIDTH := 720
-TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)//ramdisk/recovery.fstab
+TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/init/recovery.fstab
 TARGET_PREBUILT_RECOVERY_KERNEL := $(LOCAL_PATH)/blobs/kernel-ww-2.20.40.13
-TARGET_RECOVERY_INITRC := $(LOCAL_PATH)/ramdisk/recovery.init.redhookbay.rc
+TARGET_RECOVERY_INITRC := $(LOCAL_PATH)/init/recovery.init.redhookbay.rc
 RECOVERY_SDCARD_ON_DATA := true
+
+# Audio
+BOARD_USES_ALSA_AUDIO := true
+# BUILD_WITH_ALSA_UTILS := true

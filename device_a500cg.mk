@@ -14,8 +14,22 @@
 # limitations under the License.
 #
 
-LOCAL_PATH := device/asus/a500cg
+# Get the long list of APNs
+PRODUCT_COPY_FILES := device/sample/etc/apns-full-conf.xml:system/etc/apns-conf.xml
 
+# Inherit from the common Open Source product configuration
+$(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)
+
+$(call inherit-product-if-exists, vendor/asus/a500cg/a500cg-vendor.mk)
+$(call inherit-product-if-exists, vendor/google/gapps/gapps-vendor.mk)
+
+# Inherit dalvik configuration and the rest of the platform
+$(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
+
+# device specific overlay folder
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
+
+LOCAL_PATH := device/asus/a500cg
 ifeq ($(TARGET_PREBUILT_KERNEL),)
 	LOCAL_KERNEL := $(LOCAL_PATH)/blobs/kernel-ww-2.20.40.13
 else
@@ -38,90 +52,87 @@ PRODUCT_COPY_FILES += \
 
 # Ramdisk fstab / rc files
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/ramdisk/init.watchdog.rc:root/init.watchdog.rc \
-    $(LOCAL_PATH)/ramdisk/fstab.charger.redhookbay:root/fstab.charger.redhookbay \
-    $(LOCAL_PATH)/ramdisk/fstab.ramconsole.redhookbay:root/fstab.ramconsole.redhookbay \
-    $(LOCAL_PATH)/ramdisk/fstab.redhookbay:root/fstab.redhookbay \
-    $(LOCAL_PATH)/ramdisk/init.avc.rc:root/init.avc.rc \
-    $(LOCAL_PATH)/ramdisk/init.bt.rc:root/init.bt.rc \
-    $(LOCAL_PATH)/ramdisk/init.compass.rc:root/init.compass.rc \
-    $(LOCAL_PATH)/ramdisk/init.debug.rc:root/init.debug.rc \
-    $(LOCAL_PATH)/ramdisk/init.diag.rc:root/init.diag.rc \
-    $(LOCAL_PATH)/ramdisk/init.logtool.rc:root/init.logtool.rc \
-    $(LOCAL_PATH)/ramdisk/init.partlink.rc:root/init.partlink.rc \
-    $(LOCAL_PATH)/ramdisk/init.environ.rc:root/init.environ.rc \
-    $(LOCAL_PATH)/ramdisk/init.bt.vendor.rc:root/init.bt.vendor.rc \
-    $(LOCAL_PATH)/ramdisk/init.common.rc:root/init.common.rc \
-    $(LOCAL_PATH)/ramdisk/init.gps.rc:root/init.gps.rc \
-    $(LOCAL_PATH)/ramdisk/init.modem.rc:root/init.modem.rc \
-    $(LOCAL_PATH)/ramdisk/init.platform.usb.rc:root/init.platform.usb.rc \
-    $(LOCAL_PATH)/ramdisk/init.rc:root/init.rc \
-    $(LOCAL_PATH)/ramdisk/init.redhookbay.rc:root/init.redhookbay.rc \
-    $(LOCAL_PATH)/ramdisk/init.wifi.rc:root/init.wifi.rc \
-    $(LOCAL_PATH)/ramdisk/init.wifi.vendor.rc:root/init.wifi.vendor.rc \
-    $(LOCAL_PATH)/ramdisk/init.wireless.rc:root/init.wireless.rc \
-    $(LOCAL_PATH)/ramdisk/props.board.rc:root/props.board.rc \
-    $(LOCAL_PATH)/ramdisk/props.platform.rc:root/props.platform.rc \
-    $(LOCAL_PATH)/ramdisk/props.rc:root/props.rc \
-    $(LOCAL_PATH)/ramdisk/rfkill_bt.sh:root/rfkill_bt.sh \
-    $(LOCAL_PATH)/ramdisk/ueventd.modules.blacklist:root/ueventd.modules.blacklist \
-    $(LOCAL_PATH)/ramdisk/ueventd.redhookbay.rc:root/ueventd.redhookbay.rc
-
-# Intel blobs
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/ramdisk/charger:root/charger \
-    $(LOCAL_PATH)/ramdisk/upi_ug31xx:root/upi_ug31xx \
-    $(LOCAL_PATH)/ramdisk/ia_watchdogd:root/usr/bin/ia_watchdogd \
-    $(LOCAL_PATH)/ramdisk/sbin/partlink:root/sbin/partlink
+    $(LOCAL_PATH)/init/init.watchdog.rc:root/init.watchdog.rc \
+    $(LOCAL_PATH)/init/charger:root/charger \
+    $(LOCAL_PATH)/init/fstab.charger.redhookbay:root/fstab.charger.redhookbay \
+    $(LOCAL_PATH)/init/fstab.ramconsole.redhookbay:root/fstab.ramconsole.redhookbay \
+    $(LOCAL_PATH)/init/fstab.redhookbay:root/fstab.redhookbay \
+    $(LOCAL_PATH)/init/ia_watchdogd:root/usr/bin/ia_watchdogd \
+    $(LOCAL_PATH)/init/init.avc.rc:root/init.avc.rc \
+    $(LOCAL_PATH)/init/init.bt.rc:root/init.bt.rc \
+    $(LOCAL_PATH)/init/init.compass.rc:root/init.compass.rc \
+    $(LOCAL_PATH)/init/init.debug.rc:root/init.debug.rc \
+    $(LOCAL_PATH)/init/init.diag.rc:root/init.diag.rc \
+    $(LOCAL_PATH)/init/init.logtool.rc:root/init.logtool.rc \
+    $(LOCAL_PATH)/init/init.partlink.rc:root/init.partlink.rc \
+    $(LOCAL_PATH)/init/init.environ.rc:root/init.environ.rc \
+    $(LOCAL_PATH)/init/init.bt.vendor.rc:root/init.bt.vendor.rc \
+    $(LOCAL_PATH)/init/init.common.rc:root/init.common.rc \
+    $(LOCAL_PATH)/init/init.gps.rc:root/init.gps.rc \
+    $(LOCAL_PATH)/init/init.modem.rc:root/init.modem.rc \
+    $(LOCAL_PATH)/init/init.platform.usb.rc:root/init.platform.usb.rc \
+    $(LOCAL_PATH)/init/init.rc:root/init.rc \
+    $(LOCAL_PATH)/init/init.redhookbay.rc:root/init.redhookbay.rc \
+    $(LOCAL_PATH)/init/init.wifi.rc:root/init.wifi.rc \
+    $(LOCAL_PATH)/init/init.wifi.vendor.rc:root/init.wifi.vendor.rc \
+    $(LOCAL_PATH)/init/init.wireless.rc:root/init.wireless.rc \
+    $(LOCAL_PATH)/init/props.board.rc:root/props.board.rc \
+    $(LOCAL_PATH)/init/props.platform.rc:root/props.platform.rc \
+    $(LOCAL_PATH)/init/props.rc:root/props.rc \
+    $(LOCAL_PATH)/init/rfkill_bt.sh:root/rfkill_bt.sh \
+    $(LOCAL_PATH)/init/sbin/partlink:root/sbin/partlink \
+    $(LOCAL_PATH)/init/ueventd.modules.blacklist:root/ueventd.modules.blacklist \
+    $(LOCAL_PATH)/init/ueventd.redhookbay.rc:root/ueventd.redhookbay.rc \
+    $(LOCAL_PATH)/init/upi_ug31xx:root/upi_ug31xx
 
 # Binary to be replaced with source code ..
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/ramdisk/init:root/init \
-    $(LOCAL_PATH)/ramdisk/sbin/adbd:root/sbin/adbd \
-    $(LOCAL_PATH)/ramdisk/sepolicy:root/sepolicy
+    $(LOCAL_PATH)/init/init:root/init \
+    $(LOCAL_PATH)/init/sbin/adbd:root/sbin/adbd \
+    $(LOCAL_PATH)/init/sepolicy:root/sepolicy
 
 # Modules (currently from ASUS)
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/ramdisk/lib/modules/apwr3_1.ko:root/lib/modules/apwr3_1.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/pax.ko:root/lib/modules/pax.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/sep3_10.ko:root/lib/modules/sep3_10.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/vtsspp.ko:root/lib/modules/vtsspp.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/atomisp-css2300.ko:root/lib/modules/atomisp-css2300.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/bcm43362.ko:root/lib/modules/bcm43362.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/bcm_bt_lpm.ko:root/lib/modules/bcm_bt_lpm.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/cfg80211.ko:root/lib/modules/cfg80211.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/hdmi_audio.ko:root/lib/modules/hdmi_audio.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/hm2056.ko:root/lib/modules/hm2056.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/imx111.ko:root/lib/modules/imx111.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/imx219.ko:root/lib/modules/imx219.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/kxtj9.ko:root/lib/modules/kxtj9.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/mac80211.ko:root/lib/modules/mac80211.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/modules.alias:root/lib/modules/modules.alias \
-    $(LOCAL_PATH)/ramdisk/lib/modules/modules.alias.bin:root/lib/modules/modules.alias.bin \
-    $(LOCAL_PATH)/ramdisk/lib/modules/modules.dep:root/lib/modules/modules.dep \
-    $(LOCAL_PATH)/ramdisk/lib/modules/modules.dep.bin:root/lib/modules/modules.dep.bin \
-    $(LOCAL_PATH)/ramdisk/lib/modules/modules.symbols:root/lib/modules/modules.symbols \
-    $(LOCAL_PATH)/ramdisk/lib/modules/modules.symbols.bin:root/lib/modules/modules.symbols.bin \
-    $(LOCAL_PATH)/ramdisk/lib/modules/modules.isapnpmap:root/lib/modules/modules.isapnpmap \
-    $(LOCAL_PATH)/ramdisk/lib/modules/modules.softdep:root/lib/modules/modules.softdep \
-    $(LOCAL_PATH)/ramdisk/lib/modules/modules.devname:root/lib/modules/modules.devname \
-    $(LOCAL_PATH)/ramdisk/lib/modules/modules.ofmap:root/lib/modules/modules.ofmap \
-    $(LOCAL_PATH)/ramdisk/lib/modules/modules.ccwmap:root/lib/modules/modules.ccwmap \
-    $(LOCAL_PATH)/ramdisk/lib/modules/modules.ieee1394map:root/lib/modules/modules.ieee1394map \
-    $(LOCAL_PATH)/ramdisk/lib/modules/modules.pcimap:root/lib/modules/modules.pcimap \
-    $(LOCAL_PATH)/ramdisk/lib/modules/modules.inputmap:root/lib/modules/modules.inputmap \
-    $(LOCAL_PATH)/ramdisk/lib/modules/modules.seriomap:root/lib/modules/modules.seriomap \
-    $(LOCAL_PATH)/ramdisk/lib/modules/modules.usbmap:root/lib/modules/modules.usbmap \
-    $(LOCAL_PATH)/ramdisk/lib/modules/pnwdisp.ko:root/lib/modules/pnwdisp.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/pvrsgx.ko:root/lib/modules/pvrsgx.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/rmi4.ko:root/lib/modules/rmi4.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/rt8515.ko:root/lib/modules/rt8515.ko\
-    $(LOCAL_PATH)/ramdisk/lib/modules/st_drv.ko:root/lib/modules/st_drv.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/test_nx.ko:root/lib/modules/test_nx.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/videobuf-core.ko:root/lib/modules/videobuf-core.ko \
-    $(LOCAL_PATH)/ramdisk/lib/modules/videobuf-vmalloc.ko:root/lib/modules/videobuf-vmalloc.ko \
-    $(LOCAL_PATH)/ramdisk/lib/prebuild_modules/texfat.ko:root/lib/prebuild_modules/texfat.ko \
-    $(LOCAL_PATH)/ramdisk/lib/prebuild_modules/tntfs.ko:root/lib/prebuild_modules/tntfs.ko
+    $(LOCAL_PATH)/init/lib/modules/apwr3_1.ko:root/lib/modules/apwr3_1.ko \
+    $(LOCAL_PATH)/init/lib/modules/pax.ko:root/lib/modules/pax.ko \
+    $(LOCAL_PATH)/init/lib/modules/sep3_10.ko:root/lib/modules/sep3_10.ko \
+    $(LOCAL_PATH)/init/lib/modules/vtsspp.ko:root/lib/modules/vtsspp.ko \
+    $(LOCAL_PATH)/init/lib/modules/atomisp-css2300.ko:root/lib/modules/atomisp-css2300.ko \
+    $(LOCAL_PATH)/init/lib/modules/bcm43362.ko:root/lib/modules/bcm43362.ko \
+    $(LOCAL_PATH)/init/lib/modules/bcm_bt_lpm.ko:root/lib/modules/bcm_bt_lpm.ko \
+    $(LOCAL_PATH)/init/lib/modules/cfg80211.ko:root/lib/modules/cfg80211.ko \
+    $(LOCAL_PATH)/init/lib/modules/hdmi_audio.ko:root/lib/modules/hdmi_audio.ko \
+    $(LOCAL_PATH)/init/lib/modules/hm2056.ko:root/lib/modules/hm2056.ko \
+    $(LOCAL_PATH)/init/lib/modules/imx111.ko:root/lib/modules/imx111.ko \
+    $(LOCAL_PATH)/init/lib/modules/imx219.ko:root/lib/modules/imx219.ko \
+    $(LOCAL_PATH)/init/lib/modules/kxtj9.ko:root/lib/modules/kxtj9.ko \
+    $(LOCAL_PATH)/init/lib/modules/mac80211.ko:root/lib/modules/mac80211.ko \
+    $(LOCAL_PATH)/init/lib/modules/modules.alias:root/lib/modules/modules.alias \
+    $(LOCAL_PATH)/init/lib/modules/modules.alias.bin:root/lib/modules/modules.alias.bin \
+    $(LOCAL_PATH)/init/lib/modules/modules.dep:root/lib/modules/modules.dep \
+    $(LOCAL_PATH)/init/lib/modules/modules.dep.bin:root/lib/modules/modules.dep.bin \
+    $(LOCAL_PATH)/init/lib/modules/modules.symbols:root/lib/modules/modules.symbols \
+    $(LOCAL_PATH)/init/lib/modules/modules.symbols.bin:root/lib/modules/modules.symbols.bin \
+    $(LOCAL_PATH)/init/lib/modules/modules.isapnpmap:root/lib/modules/modules.isapnpmap \
+    $(LOCAL_PATH)/init/lib/modules/modules.softdep:root/lib/modules/modules.softdep \
+    $(LOCAL_PATH)/init/lib/modules/modules.devname:root/lib/modules/modules.devname \
+    $(LOCAL_PATH)/init/lib/modules/modules.ofmap:root/lib/modules/modules.ofmap \
+    $(LOCAL_PATH)/init/lib/modules/modules.ccwmap:root/lib/modules/modules.ccwmap \
+    $(LOCAL_PATH)/init/lib/modules/modules.ieee1394map:root/lib/modules/modules.ieee1394map \
+    $(LOCAL_PATH)/init/lib/modules/modules.pcimap:root/lib/modules/modules.pcimap \
+    $(LOCAL_PATH)/init/lib/modules/modules.inputmap:root/lib/modules/modules.inputmap \
+    $(LOCAL_PATH)/init/lib/modules/modules.seriomap:root/lib/modules/modules.seriomap \
+    $(LOCAL_PATH)/init/lib/modules/modules.usbmap:root/lib/modules/modules.usbmap \
+    $(LOCAL_PATH)/init/lib/modules/pnwdisp.ko:root/lib/modules/pnwdisp.ko \
+    $(LOCAL_PATH)/init/lib/modules/pvrsgx.ko:root/lib/modules/pvrsgx.ko \
+    $(LOCAL_PATH)/init/lib/modules/rmi4.ko:root/lib/modules/rmi4.ko \
+    $(LOCAL_PATH)/init/lib/modules/rt8515.ko:root/lib/modules/rt8515.ko\
+    $(LOCAL_PATH)/init/lib/modules/st_drv.ko:root/lib/modules/st_drv.ko \
+    $(LOCAL_PATH)/init/lib/modules/test_nx.ko:root/lib/modules/test_nx.ko \
+    $(LOCAL_PATH)/init/lib/modules/videobuf-core.ko:root/lib/modules/videobuf-core.ko \
+    $(LOCAL_PATH)/init/lib/modules/videobuf-vmalloc.ko:root/lib/modules/videobuf-vmalloc.ko \
+    $(LOCAL_PATH)/init/lib/prebuild_modules/texfat.ko:root/lib/prebuild_modules/texfat.ko \
+    $(LOCAL_PATH)/init/lib/prebuild_modules/tntfs.ko:root/lib/prebuild_modules/tntfs.ko
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -161,6 +172,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/audio_effects.conf:system/vendor/etc/audio_effects.conf
 
+# Enable location
+PRODUCT_PACKAGES := NetworkLocation
+
 PRODUCT_PACKAGES += \
     audio.a2dp.default \
     audio.usb.default \
@@ -192,8 +206,15 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     link_modprobe
 
-DEVICE_PACKAGE_OVERLAYS := \
-    $(LOCAL_PATH)/overlay
+# Houdini
+PRODUCT_COPY_FILES += \
+        $(call find-copy-subdir-files,*,$(LOCAL_PATH)/houdini/system,system)
+
+PRODUCT_PACKAGES += \
+   libhoudini_hook \
+   houdini_hook
+
+
 
 ############################### property ##########################
 
@@ -257,11 +278,16 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.debuggable=0 \
-    persist.sys.usb.config=mtp
+    persist.sys.usb.config=mtp \
+    dalvik.vm.houdini=on
 #    ro.secure=0 \
 #    ro.adb.secure=0 \
 
-# setup dalvik vm configs.
-$(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
+PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
+PRODUCT_NAME := full_a500cg
+PRODUCT_DEVICE := a500cg
+#PRODUCT_BRAND := Android
+#PRODUCT_MODEL := AOSP on a500cg
+#PRODUCT_MANUFACTURER := asus
 
 PRODUCT_CHARACTERISTICS := phone
