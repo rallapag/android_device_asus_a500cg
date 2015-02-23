@@ -3,6 +3,8 @@ on post-fs-data
    mkdir /data/gps 771 system system
    chown system system /data/gps
 
+# start GPS daemon
+
 service gpsd /system/bin/gpsd -c /system/etc/gpsconfig.xml
 	class main
 	user gps

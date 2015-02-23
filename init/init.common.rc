@@ -135,6 +135,7 @@ on post-fs-data
 
     # Set this property to enable Thermal service
     setprop persist.service.thermal 1
+
     # Properties for Thermal Service
     setprop ro.thermal.ituxversion 2.0
     setprop persist.thermal.shutdown.msg 1
@@ -158,7 +159,6 @@ on charger
     #default setting to enable charging in COS
     setprop sys.usb.config charging
 
-
 service pvrsrvctl /system/vendor/bin/pvrsrvctl --no-module --start
     class core
     oneshot
@@ -176,6 +176,12 @@ service drm /system/bin/drmserver
     class main
     user drm
     group drm system inet drmrpc sdcard_r security
+
+service media /system/bin/mediaserver
+    class main
+    user media
+    group system audio camera inet net_bt net_bt_admin net_bw_acct drmrpc media_rw sdcard_rw mediadrm net_raw security radio
+    ioprio rt 4
 
 #Enable Houdini for execuable
 service enable_houdini /system/bin/enable_houdini
